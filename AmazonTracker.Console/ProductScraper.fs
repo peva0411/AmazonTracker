@@ -4,6 +4,10 @@ open System
 open FSharp.Data
 open System.Globalization
 
+type ProductPage = 
+    | Pantry of HtmlDocument
+    | Default of HtmlDocument
+
 type PriceResult = {
      Price : decimal 
      ASIN : string
@@ -79,8 +83,8 @@ let rec accumulateReviews reviews (link:string) =
     let nextLinkNode = reviewDoc.CssSelect "#cm_cr-pagination_bar .a-last a" |> Seq.tryHead
    
     let nextLink = match nextLinkNode with
-        | Some l -> Some (("https://amazon.com" + (l.AttributeValue "href")))
-        | None -> None
+                    | Some l -> Some (("https://amazon.com" + (l.AttributeValue "href")))
+                    | None -> None
 
     match nextLink with 
         | Some l -> accumulateReviews appendedReviews l
@@ -128,9 +132,26 @@ let getSoldByAvail (productHtmlDoc: HtmlDocument) =
                                 |> (fun node -> node.Descendants "a") 
                                 |> Seq.head 
                                 |> (fun node -> node.InnerText())
-
-
     soldBy
+
+let createProductPage (productHtmlDoc : HtmlDocument) : ProductPage =
+    let isPantry = productHtmlDoc.CssSelect ".pantry-logo" |> Seq.isEmpty = false
+
+    match isPantry with 
+        | true -> Pantry productHtmlDoc
+        | false -> Default productHtmlDoc
+
+let getSoldByPantry (productHtmlDoc : HtmlDocument)=
+    let soldBy = productHtmlDoc.CssSelect "#pantry-availability-brief"
+                                |> Seq.head
+                                |> (fun node -> node.InnerText())
+    soldBy
+
+let getSoldBy (htmlDoc : HtmlDocument) =
+    let productHtmlDoc = createProductPage htmlDoc
+    match productHtmlDoc with 
+        | Default doc -> getSoldByAvail doc
+        | Pantry doc -> getSoldByPantry doc
 
 let getProductInfo asin =
     let productPageUrl = getAsinProductUrl asin
@@ -141,7 +162,7 @@ let getProductInfo asin =
     let productDesc = getProductDescription productHtmlDoc
     let featurePoints = getProductSummaryPoints productHtmlDoc
     let reviews = getReviews productHtmlDoc
-    let soldBy = getSoldByAvail productHtmlDoc
+    let soldBy = getSoldBy productHtmlDoc
     {
         ASIN = asin
         Title = title
