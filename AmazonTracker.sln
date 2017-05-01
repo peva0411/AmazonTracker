@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AmazonTracker.Console", "AmazonTracker.Console\AmazonTracker.Console.fsproj", "{1B17C089-EEB7-4BDA-9AC9-8291C5AE0FEA}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AmazonTracker.WebScraper", "AmazonTracker.Console\AmazonTracker.WebScraper.fsproj", "{1B17C089-EEB7-4BDA-9AC9-8291C5AE0FEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{29C41732-74DB-4162-88A3-EA20783CF3F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonTracker.Console", "ConsoleApplication1\AmazonTracker.Console.csproj", "{29C41732-74DB-4162-88A3-EA20783CF3F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
